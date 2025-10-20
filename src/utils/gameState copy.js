@@ -1,4 +1,4 @@
-// frontend/src/utils/gameState.js - WITH CAMPAIGN PROGRESSION TRACKING
+// frontend/src/utils/gameState.js - PRODUCTION VERSION WITH FULL PERSISTENCE
 
 const STORAGE_KEY = 'dnd-ollama-game-state';
 
@@ -29,34 +29,6 @@ export function loadGameState() {
       }];
     }
     
-    if (!loaded.currentAct) {
-      loaded.currentAct = 'opener';
-    }
-    
-    if (!loaded.visitedLocations) {
-      loaded.visitedLocations = [];
-    }
-    
-    if (!loaded.defeatedBosses) {
-      loaded.defeatedBosses = [];
-    }
-    
-    if (!loaded.discoveredLocations) {
-      loaded.discoveredLocations = [];
-    }
-    
-    if (!loaded.actProgress) {
-      loaded.actProgress = {
-        opener: { completed: false, objectivesCompleted: [], bossesDefeated: [] },
-        act1: { completed: false, objectivesCompleted: [], bossesDefeated: [] },
-        bridge1: { completed: false, objectivesCompleted: [], bossesDefeated: [] },
-        act2: { completed: false, objectivesCompleted: [], bossesDefeated: [] },
-        bridge2: { completed: false, objectivesCompleted: [], bossesDefeated: [] },
-        act3: { completed: false, objectivesCompleted: [], bossesDefeated: [] },
-        finale: { completed: false, objectivesCompleted: [], bossesDefeated: [] }
-      };
-    }
-    
     return loaded;
   } catch (err) {
     console.error('Error loading game state:', err);
@@ -75,8 +47,6 @@ export function clearGameState() {
 }
 
 export function createNewGameState(campaign, character) {
-  const startingLocation = campaign.structure?.opener?.locations?.[0]?.name || campaign.startingLocation;
-  
   return {
     campaign,
     character: {
@@ -111,21 +81,7 @@ export function createNewGameState(campaign, character) {
         earrings: null
       }
     }],
-    currentLocation: startingLocation,
-    currentAct: 'opener',
-    visitedLocations: [startingLocation],
-    discoveredLocations: [],
-    defeatedBosses: [],
-    metNPCs: [],
-    actProgress: {
-      opener: { completed: false, objectivesCompleted: [], bossesDefeated: [] },
-      act1: { completed: false, objectivesCompleted: [], bossesDefeated: [] },
-      bridge1: { completed: false, objectivesCompleted: [], bossesDefeated: [] },
-      act2: { completed: false, objectivesCompleted: [], bossesDefeated: [] },
-      bridge2: { completed: false, objectivesCompleted: [], bossesDefeated: [] },
-      act3: { completed: false, objectivesCompleted: [], bossesDefeated: [] },
-      finale: { completed: false, objectivesCompleted: [], bossesDefeated: [] }
-    },
+    currentLocation: campaign.startingLocation,
     activeQuests: [campaign.mainQuest],
     encounterType: 'normal',
     inCombat: false,
@@ -373,179 +329,4 @@ export function transitionToNormal(gameState, summary) {
     inCombat: false,
     conversationHistory
   };
-}
-
-export function visitLocation(gameState, locationName) {
-  const visitedLocations = [...(gameState.visitedLocations || [])];
-  if (!visitedLocations.includes(locationName)) {
-    visitedLocations.push(locationName);
-  }
-  
-  return {
-    ...gameState,
-    currentLocation: locationName,
-    visitedLocations
-  };
-}
-
-export function discoverLocation(gameState, locationName) {
-  const discoveredLocations = [...(gameState.discoveredLocations || [])];
-  if (!discoveredLocations.includes(locationName)) {
-    discoveredLocations.push(locationName);
-  }
-  
-  return {
-    ...gameState,
-    discoveredLocations
-  };
-}
-
-export function defeatBoss(gameState, bossName) {
-  const defeatedBosses = [...(gameState.defeatedBosses || [])];
-  if (!defeatedBosses.includes(bossName)) {
-    defeatedBosses.push(bossName);
-  }
-  
-  const currentAct = gameState.currentAct || 'opener';
-  const actProgress = { ...gameState.actProgress };
-  if (!actProgress[currentAct].bossesDefeated.includes(bossName)) {
-    actProgress[currentAct].bossesDefeated.push(bossName);
-  }
-  
-  return {
-    ...gameState,
-    defeatedBosses,
-    actProgress
-  };
-}
-
-export function completeObjective(gameState, objective) {
-  const currentAct = gameState.currentAct || 'opener';
-  const actProgress = { ...gameState.actProgress };
-  
-  if (!actProgress[currentAct].objectivesCompleted.includes(objective)) {
-    actProgress[currentAct].objectivesCompleted.push(objective);
-  }
-  
-  return {
-    ...gameState,
-    actProgress
-  };
-}
-
-export function progressToNextAct(gameState) {
-  const actOrder = ['opener', 'act1', 'bridge1', 'act2', 'bridge2', 'act3', 'finale'];
-  const currentIndex = actOrder.indexOf(gameState.currentAct || 'opener');
-  
-  if (currentIndex < actOrder.length - 1) {
-    const nextAct = actOrder[currentIndex + 1];
-    const actProgress = { ...gameState.actProgress };
-    actProgress[gameState.currentAct].completed = true;
-    
-    return {
-      ...gameState,
-      currentAct: nextAct,
-      actProgress
-    };
-  }
-  
-  return gameState;
-}
-
-export function meetNPC(gameState, npcName) {
-  const metNPCs = [...(gameState.metNPCs || [])];
-  if (!metNPCs.includes(npcName)) {
-    metNPCs.push(npcName);
-  }
-  
-  return {
-    ...gameState,
-    metNPCs
-  };
-}
-
-export function getConnectedLocations(gameState) {
-  if (!gameState.campaign?.structure || !gameState.currentAct) {
-    return [];
-  }
-  
-  const currentAct = gameState.currentAct;
-  const actData = gameState.campaign.structure[currentAct];
-  
-  if (!actData?.locations) {
-    return [];
-  }
-  
-  const currentLocation = actData.locations.find(
-    loc => loc.name === gameState.currentLocation
-  );
-  
-  return currentLocation?.connectedTo || [];
-}
-
-export function getAvailableCompanions(gameState) {
-  if (!gameState.campaign?.structure || !gameState.currentAct) {
-    return [];
-  }
-  
-  const currentAct = gameState.currentAct;
-  const actData = gameState.campaign.structure[currentAct];
-  
-  if (!actData?.locations) {
-    return [];
-  }
-  
-  const companions = [];
-  actData.locations.forEach(location => {
-    if (location.npcs?.companions) {
-      location.npcs.companions.forEach(companion => {
-        if (companion.canRecruit) {
-          companions.push({
-            ...companion,
-            location: location.name
-          });
-        }
-      });
-    }
-  });
-  
-  return companions;
-}
-
-export function getActObjectives(gameState) {
-  if (!gameState.campaign?.structure || !gameState.currentAct) {
-    return [];
-  }
-  
-  const currentAct = gameState.currentAct;
-  const actData = gameState.campaign.structure[currentAct];
-  
-  return actData?.objectives || [];
-}
-
-export function getActBosses(gameState) {
-  if (!gameState.campaign?.structure || !gameState.currentAct) {
-    return [];
-  }
-  
-  const currentAct = gameState.currentAct;
-  const actData = gameState.campaign.structure[currentAct];
-  
-  if (!actData?.locations) {
-    return [];
-  }
-  
-  const bosses = [];
-  actData.locations.forEach(location => {
-    if (location.enemies?.bosses) {
-      location.enemies.bosses.forEach(boss => {
-        bosses.push({
-          ...boss,
-          location: location.name
-        });
-      });
-    }
-  });
-  
-  return bosses;
 }

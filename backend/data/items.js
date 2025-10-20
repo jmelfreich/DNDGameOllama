@@ -1,4 +1,4 @@
-// D&D 5e Items Database - COMPREHENSIVE
+// D&D 5e Items Database - COMPLETE WITH equipSlot FOR PRODUCTION
 
 const items = {
   // HEALING POTIONS
@@ -13,7 +13,8 @@ const items = {
       effect: 'heal',
       value: '2d4+2',
       description: 'Restores 2d4+2 hit points when consumed',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 2,
@@ -25,7 +26,8 @@ const items = {
       effect: 'heal',
       value: '4d4+4',
       description: 'Restores 4d4+4 hit points when consumed',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 3,
@@ -37,7 +39,8 @@ const items = {
       effect: 'heal',
       value: '8d4+8',
       description: 'Restores 8d4+8 hit points when consumed',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 4,
@@ -49,7 +52,8 @@ const items = {
       effect: 'heal',
       value: '10d4+20',
       description: 'Restores 10d4+20 hit points when consumed',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 5,
@@ -61,7 +65,8 @@ const items = {
       effect: 'stabilize',
       uses: 10,
       description: 'Has 10 uses. Can stabilize a dying creature',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 6,
@@ -73,7 +78,8 @@ const items = {
       effect: 'cure_exhaustion',
       value: '4d4+4',
       description: 'Removes exhaustion and cures diseases, restores 4d4+4 HP',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     }
   ],
 
@@ -90,7 +96,8 @@ const items = {
       damageType: 'bludgeoning',
       properties: ['Light'],
       description: 'A simple wooden club',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 101,
@@ -103,7 +110,8 @@ const items = {
       damageType: 'piercing',
       properties: ['Finesse', 'Light', 'Thrown (20/60)'],
       description: 'A simple blade, can be thrown',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 102,
@@ -116,7 +124,8 @@ const items = {
       damageType: 'bludgeoning',
       properties: ['Two-Handed'],
       description: 'A large wooden club',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'both_hands'
     },
     {
       id: 103,
@@ -129,7 +138,8 @@ const items = {
       damageType: 'slashing',
       properties: ['Light', 'Thrown (20/60)'],
       description: 'A light axe that can be thrown',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 104,
@@ -142,7 +152,8 @@ const items = {
       damageType: 'piercing',
       properties: ['Thrown (30/120)'],
       description: 'A throwing spear',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 105,
@@ -155,7 +166,8 @@ const items = {
       damageType: 'bludgeoning',
       properties: ['Light', 'Thrown (20/60)'],
       description: 'A small hammer',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 106,
@@ -167,7 +179,8 @@ const items = {
       damage: '1d6',
       damageType: 'bludgeoning',
       description: 'A heavy club with a metal head',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 107,
@@ -180,7 +193,8 @@ const items = {
       damageType: 'bludgeoning',
       properties: ['Versatile (1d8)'],
       description: 'A simple wooden staff',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 108,
@@ -193,7 +207,8 @@ const items = {
       damageType: 'slashing',
       properties: ['Light'],
       description: 'A farming implement used as a weapon',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 109,
@@ -206,7 +221,8 @@ const items = {
       damageType: 'piercing',
       properties: ['Thrown (20/60)', 'Versatile (1d8)'],
       description: 'A long pole weapon',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     }
   ],
 
@@ -223,7 +239,8 @@ const items = {
       damageType: 'piercing',
       properties: ['Ammunition (80/320)', 'Loading', 'Two-Handed'],
       description: 'A simple crossbow',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'both_hands'
     },
     {
       id: 151,
@@ -236,7 +253,8 @@ const items = {
       damageType: 'piercing',
       properties: ['Finesse', 'Thrown (20/60)'],
       description: 'A small throwing dart',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 152,
@@ -249,7 +267,8 @@ const items = {
       damageType: 'piercing',
       properties: ['Ammunition (80/320)', 'Two-Handed'],
       description: 'A simple bow',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'both_hands'
     },
     {
       id: 153,
@@ -262,7 +281,8 @@ const items = {
       damageType: 'bludgeoning',
       properties: ['Ammunition (30/120)'],
       description: 'A simple sling',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     }
   ],
 
@@ -279,7 +299,8 @@ const items = {
       damageType: 'slashing',
       properties: ['Versatile (1d10)'],
       description: 'A one-handed axe',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 201,
@@ -291,7 +312,8 @@ const items = {
       damage: '1d8',
       damageType: 'bludgeoning',
       description: 'A spiked ball on a chain',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 202,
@@ -304,7 +326,8 @@ const items = {
       damageType: 'slashing',
       properties: ['Heavy', 'Reach', 'Two-Handed'],
       description: 'A pole weapon with a blade',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'both_hands'
     },
     {
       id: 203,
@@ -317,7 +340,8 @@ const items = {
       damageType: 'slashing',
       properties: ['Heavy', 'Two-Handed'],
       description: 'A massive two-handed axe',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'both_hands'
     },
     {
       id: 204,
@@ -330,7 +354,8 @@ const items = {
       damageType: 'slashing',
       properties: ['Heavy', 'Two-Handed'],
       description: 'A massive two-handed sword',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'both_hands'
     },
     {
       id: 205,
@@ -343,7 +368,8 @@ const items = {
       damageType: 'slashing',
       properties: ['Heavy', 'Reach', 'Two-Handed'],
       description: 'A pole weapon with an axe blade',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'both_hands'
     },
     {
       id: 206,
@@ -356,7 +382,8 @@ const items = {
       damageType: 'piercing',
       properties: ['Reach', 'Special'],
       description: 'A cavalry weapon',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 207,
@@ -369,7 +396,8 @@ const items = {
       damageType: 'slashing',
       properties: ['Versatile (1d10)'],
       description: 'A versatile one-handed sword',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 208,
@@ -382,7 +410,8 @@ const items = {
       damageType: 'bludgeoning',
       properties: ['Heavy', 'Two-Handed'],
       description: 'A massive two-handed hammer',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'both_hands'
     },
     {
       id: 209,
@@ -394,7 +423,8 @@ const items = {
       damage: '1d8',
       damageType: 'piercing',
       description: 'A spiked mace',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 210,
@@ -407,7 +437,8 @@ const items = {
       damageType: 'piercing',
       properties: ['Heavy', 'Reach', 'Two-Handed'],
       description: 'A long spear',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'both_hands'
     },
     {
       id: 211,
@@ -420,7 +451,8 @@ const items = {
       damageType: 'piercing',
       properties: ['Finesse'],
       description: 'A slender thrusting sword',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 212,
@@ -433,7 +465,8 @@ const items = {
       damageType: 'slashing',
       properties: ['Finesse', 'Light'],
       description: 'A curved blade',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 213,
@@ -446,7 +479,8 @@ const items = {
       damageType: 'piercing',
       properties: ['Finesse', 'Light'],
       description: 'A short blade',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 214,
@@ -459,7 +493,8 @@ const items = {
       damageType: 'piercing',
       properties: ['Thrown (20/60)', 'Versatile (1d8)'],
       description: 'A three-pronged spear',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 215,
@@ -471,7 +506,8 @@ const items = {
       damage: '1d8',
       damageType: 'piercing',
       description: 'A pick designed for war',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 216,
@@ -484,7 +520,8 @@ const items = {
       damageType: 'bludgeoning',
       properties: ['Versatile (1d10)'],
       description: 'A one-handed war hammer',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 217,
@@ -497,7 +534,8 @@ const items = {
       damageType: 'slashing',
       properties: ['Finesse', 'Reach'],
       description: 'A flexible leather whip',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     }
   ],
 
@@ -514,7 +552,8 @@ const items = {
       damageType: 'piercing',
       properties: ['Ammunition (25/100)', 'Loading'],
       description: 'A tube for shooting darts',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 251,
@@ -527,7 +566,8 @@ const items = {
       damageType: 'piercing',
       properties: ['Ammunition (30/120)', 'Light', 'Loading'],
       description: 'A small one-handed crossbow',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 252,
@@ -540,7 +580,8 @@ const items = {
       damageType: 'piercing',
       properties: ['Ammunition (100/400)', 'Heavy', 'Loading', 'Two-Handed'],
       description: 'A powerful crossbow',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'both_hands'
     },
     {
       id: 253,
@@ -553,7 +594,8 @@ const items = {
       damageType: 'piercing',
       properties: ['Ammunition (150/600)', 'Heavy', 'Two-Handed'],
       description: 'A powerful ranged weapon',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'both_hands'
     },
     {
       id: 254,
@@ -566,10 +608,12 @@ const items = {
       damageType: 'none',
       properties: ['Special', 'Thrown (5/15)'],
       description: 'Used to restrain creatures',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     }
   ],
   
+  // LIGHT ARMOR
   lightArmor: [
     {
       id: 300,
@@ -581,7 +625,8 @@ const items = {
       ac: 11,
       stealthDisadvantage: true,
       description: 'Padded armor consists of quilted layers of cloth and batting',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'armor'
     },
     {
       id: 301,
@@ -592,7 +637,8 @@ const items = {
       weight: 10,
       ac: 11,
       description: 'Leather armor is made from hardened leather',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'armor'
     },
     {
       id: 302,
@@ -603,7 +649,8 @@ const items = {
       weight: 13,
       ac: 12,
       description: 'Made from tough but flexible leather, reinforced with close-set rivets or spikes',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'armor'
     }
   ],
 
@@ -619,7 +666,8 @@ const items = {
       ac: 12,
       maxDexBonus: 2,
       description: 'Crude armor made from thick furs and pelts',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'armor'
     },
     {
       id: 311,
@@ -631,7 +679,8 @@ const items = {
       ac: 13,
       maxDexBonus: 2,
       description: 'Made of interlocking metal rings',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'armor'
     },
     {
       id: 312,
@@ -644,7 +693,8 @@ const items = {
       maxDexBonus: 2,
       stealthDisadvantage: true,
       description: 'Consists of a coat and leggings of leather covered with overlapping pieces of metal',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'armor'
     },
     {
       id: 313,
@@ -656,7 +706,8 @@ const items = {
       ac: 14,
       maxDexBonus: 2,
       description: 'Fitted metal chest piece worn with supple leather',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'armor'
     },
     {
       id: 314,
@@ -669,7 +720,8 @@ const items = {
       maxDexBonus: 2,
       stealthDisadvantage: true,
       description: 'Consists of shaped metal plates that cover most of the body',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'armor'
     }
   ],
 
@@ -685,7 +737,8 @@ const items = {
       ac: 14,
       stealthDisadvantage: true,
       description: 'Leather armor with heavy rings sewn into it',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'armor'
     },
     {
       id: 321,
@@ -698,7 +751,8 @@ const items = {
       strengthRequired: 13,
       stealthDisadvantage: true,
       description: 'Made of interlocking metal rings, includes a layer of quilted fabric',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'armor'
     },
     {
       id: 322,
@@ -711,7 +765,8 @@ const items = {
       strengthRequired: 15,
       stealthDisadvantage: true,
       description: 'Made of narrow vertical strips of metal riveted to a backing of leather',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'armor'
     },
     {
       id: 323,
@@ -724,7 +779,8 @@ const items = {
       strengthRequired: 15,
       stealthDisadvantage: true,
       description: 'Consists of shaped, interlocking metal plates to cover the entire body',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'armor'
     }
   ],
 
@@ -739,7 +795,8 @@ const items = {
       weight: 6,
       ac: 2,
       description: 'Made from wood or metal, increases AC by 2',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'l_hand'
     }
   ],
 
@@ -753,7 +810,8 @@ const items = {
       price: 1,
       weight: 1,
       description: 'Ammunition for bows',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 401,
@@ -763,7 +821,8 @@ const items = {
       price: 1,
       weight: 1,
       description: 'Ammunition for blowguns',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 402,
@@ -773,7 +832,8 @@ const items = {
       price: 1,
       weight: 1.5,
       description: 'Ammunition for crossbows',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 403,
@@ -783,7 +843,8 @@ const items = {
       price: 0.04,
       weight: 1.5,
       description: 'Ammunition for slings',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     }
   ],
 
@@ -798,7 +859,8 @@ const items = {
       weight: 5,
       capacity: '1 cubic foot/30 pounds',
       description: 'A leather pack carried on the back',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 501,
@@ -808,7 +870,8 @@ const items = {
       price: 1,
       weight: 7,
       description: 'For sleeping in the wilderness',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 502,
@@ -818,7 +881,8 @@ const items = {
       price: 1,
       weight: 10,
       description: 'Hemp rope with 2 hit points and can be burst with a DC 17 Strength check',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 503,
@@ -828,7 +892,8 @@ const items = {
       price: 10,
       weight: 5,
       description: 'Silk rope with 2 hit points and can be burst with a DC 17 Strength check',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 504,
@@ -838,7 +903,8 @@ const items = {
       price: 0.01,
       weight: 1,
       description: 'Provides bright light in a 20-foot radius for 1 hour',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 505,
@@ -848,7 +914,8 @@ const items = {
       price: 10,
       weight: 2,
       description: 'Casts bright light in a 60-foot cone and dim light for an additional 60 feet',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 506,
@@ -858,7 +925,8 @@ const items = {
       price: 5,
       weight: 2,
       description: 'Casts bright light in a 30-foot radius and dim light for an additional 30 feet',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 507,
@@ -868,7 +936,8 @@ const items = {
       price: 0.1,
       weight: 1,
       description: 'Can be thrown as a splash weapon or used in lamps',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 508,
@@ -878,7 +947,8 @@ const items = {
       price: 0.5,
       weight: 1,
       description: 'Used to start fires',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 509,
@@ -889,7 +959,8 @@ const items = {
       weight: 5,
       capacity: '4 pints',
       description: 'Holds liquid',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 510,
@@ -899,7 +970,8 @@ const items = {
       price: 0.5,
       weight: 2,
       description: 'Dry foods suitable for extended travel',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 511,
@@ -909,7 +981,8 @@ const items = {
       price: 2,
       weight: 5,
       description: 'Grants advantage on Strength checks where leverage can be applied',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 512,
@@ -919,7 +992,8 @@ const items = {
       price: 2,
       weight: 4,
       description: 'For climbing and securing rope',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 513,
@@ -929,7 +1003,8 @@ const items = {
       price: 1,
       weight: 3,
       description: 'For driving pitons and other tasks',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 514,
@@ -939,7 +1014,8 @@ const items = {
       price: 0.05,
       weight: 0.25,
       description: 'Used for climbing',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 515,
@@ -949,7 +1025,8 @@ const items = {
       price: 2,
       weight: 20,
       description: 'Simple shelter for two people',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 516,
@@ -959,7 +1036,8 @@ const items = {
       price: 0.5,
       weight: 3,
       description: 'A wool blanket',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 517,
@@ -969,7 +1047,8 @@ const items = {
       price: 0.01,
       weight: 0,
       description: 'For marking',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 518,
@@ -980,7 +1059,8 @@ const items = {
       weight: 25,
       capacity: '12 cubic feet/300 pounds',
       description: 'For storage',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 519,
@@ -990,7 +1070,8 @@ const items = {
       price: 5,
       weight: 0.5,
       description: 'Useful for looking around corners',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 520,
@@ -1000,7 +1081,8 @@ const items = {
       price: 5,
       weight: 10,
       description: 'Has 10 hit points, can be burst with DC 20 Strength check',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     }
   ],
 
@@ -1014,7 +1096,8 @@ const items = {
       price: 25,
       weight: 1,
       description: 'For picking locks and disarming traps',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 601,
@@ -1024,7 +1107,8 @@ const items = {
       price: 25,
       weight: 3,
       description: 'For creating disguises',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 602,
@@ -1034,7 +1118,8 @@ const items = {
       price: 15,
       weight: 5,
       description: 'For creating fake documents',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 603,
@@ -1044,7 +1129,8 @@ const items = {
       price: 5,
       weight: 3,
       description: 'For identifying and using herbs',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 604,
@@ -1054,7 +1140,8 @@ const items = {
       price: 25,
       weight: 2,
       description: 'For navigation at sea',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 605,
@@ -1064,7 +1151,8 @@ const items = {
       price: 50,
       weight: 2,
       description: 'For creating and identifying poisons',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 606,
@@ -1074,7 +1162,8 @@ const items = {
       price: 50,
       weight: 8,
       description: 'For creating alchemical items',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 607,
@@ -1084,7 +1173,8 @@ const items = {
       price: 20,
       weight: 9,
       description: 'For brewing beer and ale',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 608,
@@ -1094,7 +1184,8 @@ const items = {
       price: 10,
       weight: 5,
       description: 'For writing and drawing',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 609,
@@ -1104,7 +1195,8 @@ const items = {
       price: 8,
       weight: 6,
       description: 'For woodworking',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 610,
@@ -1114,7 +1206,8 @@ const items = {
       price: 1,
       weight: 8,
       description: 'For cooking',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 611,
@@ -1124,7 +1217,8 @@ const items = {
       price: 20,
       weight: 8,
       description: 'For smithing',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     }
   ],
 
@@ -1141,7 +1235,8 @@ const items = {
       value: '1d4',
       damageType: 'fire',
       description: 'Deals 1d4 fire damage on hit, ignites target for ongoing damage',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 701,
@@ -1154,7 +1249,8 @@ const items = {
       value: '2d6',
       damageType: 'acid',
       description: 'Deals 2d6 acid damage',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 702,
@@ -1167,7 +1263,8 @@ const items = {
       value: '2d6',
       damageType: 'radiant',
       description: 'Deals 2d6 radiant damage to undead and fiends',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 703,
@@ -1180,7 +1277,8 @@ const items = {
       value: '1d4',
       damageType: 'poison',
       description: 'Can be applied to weapons, deals 1d4 poison damage',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 704,
@@ -1191,7 +1289,8 @@ const items = {
       weight: 0,
       effect: 'cure_poison',
       description: 'Grants advantage against poison for 1 hour',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 705,
@@ -1203,7 +1302,8 @@ const items = {
       effect: 'area_denial',
       value: '1d4',
       description: 'Covers 5-foot square, deals 1d4 piercing damage and reduces speed',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 706,
@@ -1214,7 +1314,8 @@ const items = {
       weight: 2,
       effect: 'area_denial',
       description: 'Covers 10-foot square, creatures must succeed on DC 10 Dex save or fall prone',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     }
   ],
 
@@ -1230,7 +1331,8 @@ const items = {
       weight: 0.5,
       effect: 'buff_climbing',
       description: 'Gain climbing speed equal to walking speed for 1 hour',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 801,
@@ -1242,7 +1344,8 @@ const items = {
       weight: 0.5,
       effect: 'charm_beast',
       description: 'Can cast Animal Friendship for 1 hour',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 802,
@@ -1256,7 +1359,8 @@ const items = {
       value: '4d6',
       damageType: 'fire',
       description: 'After drinking, can exhale fire three times (4d6 damage, DC 13 Dex save)',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 803,
@@ -1269,7 +1373,8 @@ const items = {
       effect: 'buff_strength',
       value: '21',
       description: 'Strength becomes 21 for 1 hour',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 804,
@@ -1282,7 +1387,8 @@ const items = {
       effect: 'buff_strength',
       value: '23',
       description: 'Strength becomes 23 for 1 hour',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 805,
@@ -1295,7 +1401,8 @@ const items = {
       effect: 'buff_strength',
       value: '25',
       description: 'Strength becomes 25 for 1 hour',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 806,
@@ -1308,7 +1415,8 @@ const items = {
       effect: 'buff_strength',
       value: '27',
       description: 'Strength becomes 27 for 1 hour',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 807,
@@ -1321,7 +1429,8 @@ const items = {
       effect: 'buff_strength',
       value: '29',
       description: 'Strength becomes 29 for 1 hour',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 808,
@@ -1333,7 +1442,8 @@ const items = {
       weight: 0.5,
       effect: 'enlarge',
       description: 'As if under the Enlarge effect for 1d4 hours',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 809,
@@ -1345,7 +1455,8 @@ const items = {
       weight: 0.5,
       effect: 'reduce',
       description: 'As if under the Reduce effect for 1d4 hours',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 810,
@@ -1357,7 +1468,8 @@ const items = {
       weight: 0.5,
       effect: 'gaseous_form',
       description: 'Transform into a misty cloud for 1 hour',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 811,
@@ -1370,7 +1482,8 @@ const items = {
       effect: 'buff_temp_hp',
       value: '10',
       description: 'Gain 10 temporary HP and advantage on attack rolls for 1 hour',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 812,
@@ -1382,7 +1495,8 @@ const items = {
       weight: 0.5,
       effect: 'buff_invisibility',
       description: 'Become invisible for 1 hour or until you attack or cast a spell',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 813,
@@ -1394,7 +1508,8 @@ const items = {
       weight: 0.5,
       effect: 'detect_thoughts',
       description: 'Can cast Detect Thoughts at will for 10 minutes',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 814,
@@ -1408,7 +1523,8 @@ const items = {
       value: '3d6',
       damageType: 'poison',
       description: 'Take 3d6 poison damage and possibly become poisoned',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 815,
@@ -1420,7 +1536,8 @@ const items = {
       weight: 0.5,
       effect: 'buff_resistance',
       description: 'Gain resistance to one damage type for 1 hour',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 816,
@@ -1432,7 +1549,8 @@ const items = {
       weight: 0.5,
       effect: 'buff_speed',
       description: 'Gain effects of Haste spell for 1 minute',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 817,
@@ -1444,7 +1562,8 @@ const items = {
       weight: 0.5,
       effect: 'water_breathing',
       description: 'Can breathe underwater for 1 hour',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 818,
@@ -1456,7 +1575,8 @@ const items = {
       weight: 0.5,
       effect: 'flying',
       description: 'Gain flying speed of 60 feet for 1 hour',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     }
   ],
 
@@ -1472,7 +1592,8 @@ const items = {
       weight: 0,
       effect: 'spell',
       description: 'Contains a cantrip, can be cast once',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 901,
@@ -1484,7 +1605,8 @@ const items = {
       weight: 0,
       effect: 'spell',
       description: 'Contains a 1st-level spell, can be cast once',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 902,
@@ -1496,7 +1618,8 @@ const items = {
       weight: 0,
       effect: 'spell',
       description: 'Contains a 2nd-level spell, can be cast once',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 903,
@@ -1508,7 +1631,8 @@ const items = {
       weight: 0,
       effect: 'spell',
       description: 'Contains a 3rd-level spell, can be cast once',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'none'
     },
     {
       id: 904,
@@ -1522,7 +1646,8 @@ const items = {
       value: '3d4+3',
       charges: 7,
       description: '7 charges, cast Magic Missile (3 missiles, 1d4+1 each)',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'r_hand'
     },
     {
       id: 905,
@@ -1535,7 +1660,8 @@ const items = {
       effect: 'web',
       charges: 7,
       description: '7 charges, cast Web spell',
-      usableInCombat: true
+      usableInCombat: true,
+      equipSlot: 'r_hand'
     },
     {
       id: 906,
@@ -1546,7 +1672,8 @@ const items = {
       rarity: 'uncommon',
       bonus: 1,
       description: 'Any weapon with +1 to attack and damage rolls',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'r_hand'
     },
     {
       id: 907,
@@ -1557,7 +1684,8 @@ const items = {
       rarity: 'rare',
       bonus: 1,
       description: 'Any armor with +1 to AC',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'armor'
     },
     {
       id: 908,
@@ -1569,7 +1697,8 @@ const items = {
       weight: 15,
       capacity: '500 pounds/64 cubic feet',
       description: 'Extradimensional storage',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 909,
@@ -1580,7 +1709,8 @@ const items = {
       rarity: 'uncommon',
       weight: 3,
       description: '60-foot rope that animates on command',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 910,
@@ -1590,7 +1720,8 @@ const items = {
       price: 2500,
       rarity: 'uncommon',
       description: 'Advantage on Stealth checks to move silently',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'feet'
     },
     {
       id: 911,
@@ -1600,7 +1731,8 @@ const items = {
       price: 5000,
       rarity: 'uncommon',
       description: 'Advantage on Stealth checks to hide',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'cape'
     },
     {
       id: 912,
@@ -1610,7 +1742,8 @@ const items = {
       price: 3000,
       rarity: 'uncommon',
       description: 'Can catch projectiles',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'gloves'
     },
     {
       id: 913,
@@ -1621,7 +1754,8 @@ const items = {
       rarity: 'rare',
       bonus: 1,
       description: '+1 to AC and saving throws',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'ring1'
     },
     {
       id: 914,
@@ -1631,7 +1765,8 @@ const items = {
       price: 8000,
       rarity: 'rare',
       description: 'Constitution becomes 19',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'earrings'
     }
   ],
 
@@ -1645,7 +1780,8 @@ const items = {
       price: 0.2,
       weight: 1,
       description: 'Common ale',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 1001,
@@ -1655,7 +1791,8 @@ const items = {
       price: 0.2,
       weight: 6,
       description: 'Common wine',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 1002,
@@ -1665,7 +1802,8 @@ const items = {
       price: 10,
       weight: 1.5,
       description: 'Fine wine',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 1003,
@@ -1675,7 +1813,8 @@ const items = {
       price: 0.03,
       weight: 0.5,
       description: 'Poor quality meal',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 1004,
@@ -1685,7 +1824,8 @@ const items = {
       price: 0.3,
       weight: 0.5,
       description: 'Decent meal',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 1005,
@@ -1695,7 +1835,8 @@ const items = {
       price: 0.5,
       weight: 0.5,
       description: 'Good meal',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     },
     {
       id: 1006,
@@ -1705,7 +1846,8 @@ const items = {
       price: 2,
       weight: 0.5,
       description: 'Excellent meal',
-      usableInCombat: false
+      usableInCombat: false,
+      equipSlot: 'none'
     }
   ]
 };
@@ -1759,102 +1901,107 @@ function getArmor() {
 }
 
 function getStartingItems(characterClass) {
-  // Starting inventory based on class
+  // Starting inventory based on class - clone items with unique IDs
+  const cloneItem = (item) => {
+    if (!item) return null;
+    return { ...item, id: Date.now() + Math.random() };
+  };
+
   const startingInventories = {
     'Fighter': [
-      getItemById(207), // Longsword
-      getItemById(330), // Shield
-      getItemById(321), // Chain Mail
-      getItemById(1),   // Potion of Healing
-      getItemById(500), // Backpack
-      getItemById(510)  // Rations
+      cloneItem(getItemById(207)), // Longsword
+      cloneItem(getItemById(330)), // Shield
+      cloneItem(getItemById(321)), // Chain Mail
+      cloneItem(getItemById(1)),   // Potion of Healing
+      cloneItem(getItemById(500)), // Backpack
+      cloneItem(getItemById(510))  // Rations
     ],
     'Wizard': [
-      getItemById(107), // Quarterstaff
-      getItemById(901), // Spell Scroll (1st Level)
-      getItemById(1),   // Potion of Healing
-      getItemById(500), // Backpack
-      getItemById(510), // Rations
-      getItemById(608)  // Calligrapher's Supplies
+      cloneItem(getItemById(107)), // Quarterstaff
+      cloneItem(getItemById(901)), // Spell Scroll (1st Level)
+      cloneItem(getItemById(1)),   // Potion of Healing
+      cloneItem(getItemById(500)), // Backpack
+      cloneItem(getItemById(510)), // Rations
+      cloneItem(getItemById(608))  // Calligrapher's Supplies
     ],
     'Rogue': [
-      getItemById(213), // Shortsword
-      getItemById(101), // Dagger
-      getItemById(302), // Studded Leather
-      getItemById(600), // Thieves' Tools
-      getItemById(1),   // Potion of Healing
-      getItemById(500)  // Backpack
+      cloneItem(getItemById(213)), // Shortsword
+      cloneItem(getItemById(101)), // Dagger
+      cloneItem(getItemById(302)), // Studded Leather
+      cloneItem(getItemById(600)), // Thieves' Tools
+      cloneItem(getItemById(1)),   // Potion of Healing
+      cloneItem(getItemById(500))  // Backpack
     ],
     'Cleric': [
-      getItemById(106), // Mace
-      getItemById(330), // Shield
-      getItemById(311), // Chain Shirt
-      getItemById(702), // Holy Water
-      getItemById(2),   // Potion of Greater Healing
-      getItemById(500)  // Backpack
+      cloneItem(getItemById(106)), // Mace
+      cloneItem(getItemById(330)), // Shield
+      cloneItem(getItemById(311)), // Chain Shirt
+      cloneItem(getItemById(702)), // Holy Water
+      cloneItem(getItemById(2)),   // Potion of Greater Healing
+      cloneItem(getItemById(500))  // Backpack
     ],
     'Barbarian': [
-      getItemById(204), // Greatsword
-      getItemById(103), // Handaxe
-      getItemById(103), // Handaxe (second)
-      getItemById(1),   // Potion of Healing
-      getItemById(500), // Backpack
-      getItemById(104)  // Javelin
+      cloneItem(getItemById(204)), // Greatsword
+      cloneItem(getItemById(103)), // Handaxe
+      cloneItem(getItemById(103)), // Handaxe (second)
+      cloneItem(getItemById(1)),   // Potion of Healing
+      cloneItem(getItemById(500)), // Backpack
+      cloneItem(getItemById(104))  // Javelin
     ],
     'Ranger': [
-      getItemById(253), // Longbow
-      getItemById(400), // Arrows
-      getItemById(213), // Shortsword
-      getItemById(302), // Studded Leather
-      getItemById(1),   // Potion of Healing
-      getItemById(500)  // Backpack
+      cloneItem(getItemById(253)), // Longbow
+      cloneItem(getItemById(400)), // Arrows
+      cloneItem(getItemById(213)), // Shortsword
+      cloneItem(getItemById(302)), // Studded Leather
+      cloneItem(getItemById(1)),   // Potion of Healing
+      cloneItem(getItemById(500))  // Backpack
     ],
     'Paladin': [
-      getItemById(207), // Longsword
-      getItemById(330), // Shield
-      getItemById(321), // Chain Mail
-      getItemById(702), // Holy Water
-      getItemById(2),   // Potion of Greater Healing
-      getItemById(500)  // Backpack
+      cloneItem(getItemById(207)), // Longsword
+      cloneItem(getItemById(330)), // Shield
+      cloneItem(getItemById(321)), // Chain Mail
+      cloneItem(getItemById(702)), // Holy Water
+      cloneItem(getItemById(2)),   // Potion of Greater Healing
+      cloneItem(getItemById(500))  // Backpack
     ],
     'Warlock': [
-      getItemById(101), // Dagger
-      getItemById(301), // Leather Armor
-      getItemById(1),   // Potion of Healing
-      getItemById(800), // Potion of Climbing
-      getItemById(500)  // Backpack
+      cloneItem(getItemById(101)), // Dagger
+      cloneItem(getItemById(301)), // Leather Armor
+      cloneItem(getItemById(1)),   // Potion of Healing
+      cloneItem(getItemById(800)), // Potion of Climbing
+      cloneItem(getItemById(500))  // Backpack
     ],
     'Monk': [
-      getItemById(107), // Quarterstaff
-      getItemById(151), // Dart (x10)
-      getItemById(1),   // Potion of Healing
-      getItemById(500), // Backpack
-      getItemById(502)  // Rope
+      cloneItem(getItemById(107)), // Quarterstaff
+      cloneItem(getItemById(151)), // Dart (x10)
+      cloneItem(getItemById(1)),   // Potion of Healing
+      cloneItem(getItemById(500)), // Backpack
+      cloneItem(getItemById(502))  // Rope
     ],
     'Bard': [
-      getItemById(211), // Rapier
-      getItemById(101), // Dagger
-      getItemById(301), // Leather Armor
-      getItemById(1),   // Potion of Healing
-      getItemById(500)  // Backpack
+      cloneItem(getItemById(211)), // Rapier
+      cloneItem(getItemById(101)), // Dagger
+      cloneItem(getItemById(301)), // Leather Armor
+      cloneItem(getItemById(1)),   // Potion of Healing
+      cloneItem(getItemById(500))  // Backpack
     ],
     'Druid': [
-      getItemById(107), // Quarterstaff
-      getItemById(310), // Hide Armor
-      getItemById(2),   // Potion of Greater Healing
-      getItemById(603), // Herbalism Kit
-      getItemById(500)  // Backpack
+      cloneItem(getItemById(107)), // Quarterstaff
+      cloneItem(getItemById(310)), // Hide Armor
+      cloneItem(getItemById(2)),   // Potion of Greater Healing
+      cloneItem(getItemById(603)), // Herbalism Kit
+      cloneItem(getItemById(500))  // Backpack
     ],
     'Sorcerer': [
-      getItemById(101), // Dagger
-      getItemById(1),   // Potion of Healing
-      getItemById(802), // Potion of Fire Breath
-      getItemById(500), // Backpack
-      getItemById(901)  // Spell Scroll (1st Level)
+      cloneItem(getItemById(101)), // Dagger
+      cloneItem(getItemById(1)),   // Potion of Healing
+      cloneItem(getItemById(802)), // Potion of Fire Breath
+      cloneItem(getItemById(500)), // Backpack
+      cloneItem(getItemById(901))  // Spell Scroll (1st Level)
     ]
   };
 
-  return startingInventories[characterClass] || [getItemById(1), getItemById(500)];
+  return (startingInventories[characterClass] || [cloneItem(getItemById(1)), cloneItem(getItemById(500))]).filter(item => item !== null);
 }
 
 module.exports = {

@@ -1,4 +1,4 @@
-// frontend/src/pages/Home.js
+// frontend/src/pages/Home.js - FIXED NULL CHARACTER CHECK
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { clearGameState } from '../utils/gameState';
@@ -19,8 +19,12 @@ function Home({ gameState }) {
   };
 
   const handleContinueGame = () => {
-    if (gameState) {
+    // Check if we have both campaign and character
+    if (gameState && gameState.character) {
       navigate('/game');
+    } else if (gameState && gameState.campaign && !gameState.character) {
+      // If campaign exists but no character, go to character creation
+      navigate('/character');
     }
   };
 
@@ -33,6 +37,11 @@ function Home({ gameState }) {
     setShowDeleteConfirm(false);
     window.location.reload();
   };
+
+  // Check if we have a complete save (both campaign and character)
+  const hasCompleteSave = gameState && gameState.character;
+  // Check if we have a partial save (campaign but no character)
+  const hasPartialSave = gameState && gameState.campaign && !gameState.character;
 
   return (
     <div className="page home-page">
@@ -57,7 +66,9 @@ function Home({ gameState }) {
               onClick={handleContinueGame}
             >
               <span className="menu-number">02</span>
-              <span className="menu-text">Continue Game</span>
+              <span className="menu-text">
+                {hasPartialSave ? 'Continue Setup' : 'Continue Game'}
+              </span>
             </button>
           )}
 
@@ -80,7 +91,8 @@ function Home({ gameState }) {
           )}
         </div>
 
-        {gameState && (
+        {/* Show character info only if we have a complete save */}
+        {hasCompleteSave && (
           <div className="game-info">
             <div className="info-header">
               <div className="info-title">Current Save</div>
@@ -110,6 +122,28 @@ function Home({ gameState }) {
                 <div className="info-label">Campaign</div>
                 <div className="info-value">{gameState.campaign.title}</div>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Show campaign info if we have a partial save */}
+        {hasPartialSave && (
+          <div className="game-info">
+            <div className="info-header">
+              <div className="info-title">Campaign in Progress</div>
+            </div>
+            <div className="info-grid">
+              <div className="info-item">
+                <div className="info-label">Campaign</div>
+                <div className="info-value">{gameState.campaign.title}</div>
+              </div>
+              <div className="info-item">
+                <div className="info-label">Status</div>
+                <div className="info-value">Character Creation</div>
+              </div>
+            </div>
+            <div style={{ marginTop: '1rem', padding: '1rem', backgroundColor: 'var(--color-gray-100)', borderLeft: '4px solid var(--color-blue)' }}>
+              <strong>Continue Setup:</strong> Complete your character creation to start playing!
             </div>
           </div>
         )}

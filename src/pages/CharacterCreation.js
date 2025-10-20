@@ -1,4 +1,4 @@
-// frontend/src/components/CharacterCreation.js - FIXED & WORKING
+// frontend/src/pages/CharacterCreation.js - COMPLETE PRODUCTION VERSION - FIXED
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
@@ -27,7 +27,19 @@ function CharacterCreation({ updateGameState, gameState }) {
     attacks: [],
     inventory: [],
     multiclass: [],
-    skills: []
+    skills: [],
+    equipment: {
+      head: null,
+      armor: null,
+      gloves: null,
+      feet: null,
+      cape: null,
+      r_hand: null,
+      l_hand: null,
+      ring1: null,
+      ring2: null,
+      earrings: null
+    }
   });
 
   const [pointsRemaining, setPointsRemaining] = useState(27);
@@ -37,6 +49,8 @@ function CharacterCreation({ updateGameState, gameState }) {
   const [availableFeats, setAvailableFeats] = useState([]);
   const [selectedFeat, setSelectedFeat] = useState(null);
   const [selectedFeatData, setSelectedFeatData] = useState(null);
+  const [startingItems, setStartingItems] = useState([]);
+  const [selectedEquipment, setSelectedEquipment] = useState({});
 
   // All skills mapped to abilities
   const allSkills = {
@@ -69,7 +83,7 @@ function CharacterCreation({ updateGameState, gameState }) {
     'Ranger': ['Animal Handling', 'Athletics', 'Insight', 'Investigation', 'Nature', 'Perception', 'Stealth', 'Survival'],
     'Paladin': ['Athletics', 'Insight', 'Intimidation', 'Medicine', 'Persuasion', 'Religion'],
     'Barbarian': ['Animal Handling', 'Athletics', 'Intimidation', 'Nature', 'Perception', 'Survival'],
-    'Bard': Object.keys(allSkills), // Bards can choose any
+    'Bard': Object.keys(allSkills),
     'Druid': ['Arcana', 'Animal Handling', 'Insight', 'Medicine', 'Nature', 'Perception', 'Religion', 'Survival'],
     'Monk': ['Acrobatics', 'Athletics', 'History', 'Insight', 'Religion', 'Stealth'],
     'Sorcerer': ['Arcana', 'Deception', 'Insight', 'Intimidation', 'Persuasion', 'Religion'],
@@ -77,18 +91,9 @@ function CharacterCreation({ updateGameState, gameState }) {
   };
 
   const classSkillCount = {
-    'Fighter': 2,
-    'Wizard': 2,
-    'Rogue': 4,
-    'Cleric': 2,
-    'Ranger': 3,
-    'Paladin': 2,
-    'Barbarian': 2,
-    'Bard': 3,
-    'Druid': 2,
-    'Monk': 2,
-    'Sorcerer': 2,
-    'Warlock': 2
+    'Fighter': 2, 'Wizard': 2, 'Rogue': 4, 'Cleric': 2, 'Ranger': 3,
+    'Paladin': 2, 'Barbarian': 2, 'Bard': 3, 'Druid': 2, 'Monk': 2,
+    'Sorcerer': 2, 'Warlock': 2
   };
 
   useEffect(() => {
@@ -97,13 +102,19 @@ function CharacterCreation({ updateGameState, gameState }) {
       return;
     }
 
-    // Load classes and races
+    // Load classes and races (they come as arrays of strings)
     api.get('/api/game/classes')
-      .then(response => setClasses(response.data))
+      .then(response => {
+        console.log('Classes loaded:', response.data);
+        setClasses(response.data);
+      })
       .catch(err => console.error('Error loading classes:', err));
 
     api.get('/api/game/races')
-      .then(response => setRaces(response.data))
+      .then(response => {
+        console.log('Races loaded:', response.data);
+        setRaces(response.data);
+      })
       .catch(err => console.error('Error loading races:', err));
   }, [gameState, navigate]);
 
@@ -116,9 +127,9 @@ function CharacterCreation({ updateGameState, gameState }) {
     
     try {
       const response = await api.get(`/api/game/races/${raceName}`);
+      console.log('Race data loaded:', response.data);
       setSelectedRaceData(response.data);
       
-      // If Variant Human, load feats
       if (raceName === 'Variant Human') {
         const featsResponse = await api.get('/api/game/feats/level/1');
         setAvailableFeats(featsResponse.data);
@@ -134,17 +145,20 @@ function CharacterCreation({ updateGameState, gameState }) {
   const handleClassSelect = async (className) => {
     setCharacter({ ...character, class: className });
     
-    // Set available skills based on class
     const skills = classSkills[className] || Object.keys(allSkills);
     setAvailableSkills(skills);
-    setSelectedSkills([]); // Reset selected skills
+    setSelectedSkills([]);
     
-    // Load starting attacks
     try {
       const response = await api.get(`/api/game/attacks/${className}/1`);
       setCharacter(prev => ({ ...prev, attacks: response.data }));
+
+      // Load starting items
+      const itemsResponse = await api.get(`/api/game/items/starting/${className}`);
+      console.log('Starting items loaded:', itemsResponse.data);
+      setStartingItems(itemsResponse.data || []);
     } catch (err) {
-      console.error('Error loading attacks:', err);
+      console.error('Error loading class data:', err);
     }
   };
 
@@ -171,8 +185,7 @@ function CharacterCreation({ updateGameState, gameState }) {
 
   const getAbilityCost = (currentValue, newValue) => {
     const costs = {
-      8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5,
-      14: 7, 15: 9
+      8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 7, 15: 9
     };
     
     if (newValue > currentValue) {
@@ -201,6 +214,25 @@ function CharacterCreation({ updateGameState, gameState }) {
     setPointsRemaining(pointsRemaining - cost);
   };
 
+  const handleEquipItem = (item, slot) => {
+    const newSelectedEquipment = { ...selectedEquipment };
+    
+    if (item.equipSlot === 'both_hands') {
+      newSelectedEquipment.r_hand = item;
+      newSelectedEquipment.l_hand = null;
+    } else {
+      newSelectedEquipment[slot] = item;
+    }
+    
+    setSelectedEquipment(newSelectedEquipment);
+  };
+
+  const handleUnequipItem = (slot) => {
+    const newSelectedEquipment = { ...selectedEquipment };
+    newSelectedEquipment[slot] = null;
+    setSelectedEquipment(newSelectedEquipment);
+  };
+
   const calculateFinalStats = () => {
     const finalChar = { ...character };
     
@@ -213,16 +245,13 @@ function CharacterCreation({ updateGameState, gameState }) {
       });
     }
 
-    // Apply feat ability score increases (if any)
+    // Apply feat ability score increases
     if (selectedFeatData && selectedFeatData.abilityScoreIncrease) {
       const { abilityScoreIncrease } = selectedFeatData;
       if (abilityScoreIncrease.choice) {
-        // For feats with a choice, we'll just apply to the first valid ability for now
-        // In a full implementation, you'd ask the user to choose
         const ability = abilityScoreIncrease.choice[0];
         finalChar[ability] += abilityScoreIncrease.amount;
       } else {
-        // Direct ability increases
         Object.keys(abilityScoreIncrease).forEach(ability => {
           if (finalChar[ability] !== undefined) {
             finalChar[ability] += abilityScoreIncrease[ability];
@@ -243,9 +272,9 @@ function CharacterCreation({ updateGameState, gameState }) {
     finalChar.maxHp = hitDie + conModifier;
     finalChar.hp = finalChar.maxHp;
     
-    // Apply Tough feat if selected
+    // Apply Tough feat
     if (selectedFeat === 'Tough') {
-      finalChar.maxHp += 2; // +2 HP at level 1
+      finalChar.maxHp += 2;
       finalChar.hp = finalChar.maxHp;
     }
     
@@ -265,27 +294,35 @@ function CharacterCreation({ updateGameState, gameState }) {
       };
     }
 
-    // Load starting inventory
-    api.get(`/api/game/items/starting/${character.class}`)
-      .then(response => {
-        finalChar.inventory = response.data || [];
-        saveAndStart(finalChar);
-      })
-      .catch(err => {
-        console.error('Error loading starting items:', err);
-        finalChar.inventory = [];
-        saveAndStart(finalChar);
-      });
+    // Add starting inventory and equipped items
+    const equippedItems = Object.values(selectedEquipment).filter(item => item !== null);
+    const unequippedItems = startingItems.filter(item => 
+      !equippedItems.some(eItem => eItem.id === item.id)
+    );
+    
+    finalChar.inventory = [...equippedItems, ...unequippedItems];
+    finalChar.equipment = { ...character.equipment, ...selectedEquipment };
+
+    return finalChar;
   };
 
-  const saveAndStart = (finalChar) => {
+  const handleComplete = () => {
+    const finalChar = calculateFinalStats();
+    
+    console.log('Final character:', finalChar);
+    
     updateGameState({
       ...gameState,
       character: finalChar,
+      party: [{
+        ...finalChar,
+        isActive: true,
+        isLeader: true
+      }],
       currentLocation: gameState.campaign.startingLocation,
       encounterType: 'normal',
       conversationHistory: [],
-      activeQuests: [],
+      activeQuests: [gameState.campaign.mainQuest],
       turnCount: 0
     });
 
@@ -295,7 +332,10 @@ function CharacterCreation({ updateGameState, gameState }) {
   const getTotalSteps = () => {
     let steps = 5; // Name, Race, Class, Abilities, Skills
     if (character.race === 'Variant Human') {
-      steps += 1; // Add feat selection step
+      steps += 1; // Feat selection
+    }
+    if (startingItems.length > 0) {
+      steps += 1; // Equipment selection
     }
     return steps;
   };
@@ -318,265 +358,330 @@ function CharacterCreation({ updateGameState, gameState }) {
       return;
     }
     
-    // Check if we're on skills step (step 5 for normal, step 6 for Variant Human)
-    const isSkillsStep = (character.race === 'Variant Human' && step === 6) || 
-                         (character.race !== 'Variant Human' && step === 5);
+    const currentStepNumber = step;
+    const skillsStepNumber = getTotalSteps() - (startingItems.length > 0 ? 1 : 0);
     
-    if (isSkillsStep) {
+    if (currentStepNumber === skillsStepNumber) {
       const requiredSkills = classSkillCount[character.class] || 2;
       if (selectedSkills.length < requiredSkills) {
         alert(`Please select ${requiredSkills} skills`);
         return;
       }
-      calculateFinalStats();
-      return;
     }
     
-    // Check feat selection for Variant Human
     if (character.race === 'Variant Human' && step === 5 && !selectedFeat) {
       alert('Please select a feat');
       return;
     }
     
-    setStep(step + 1);
+    if (step < getTotalSteps()) {
+      setStep(step + 1);
+    } else {
+      handleComplete();
+    }
   };
 
   const handleBack = () => {
-    if (step > 1) setStep(step - 1);
+    if (step > 1) {
+      setStep(step - 1);
+    }
   };
 
-  return (
-    <div className="page character-creation-page">
-      <div className="container">
-        <button className="back-button" onClick={() => navigate('/campaign')}>
-          ← Back
-        </button>
+  const renderStepContent = () => {
+    if (step === 1) {
+      return (
+        <div className="form-step">
+          <h2 className="step-title">What is your character's name?</h2>
+          <input
+            type="text"
+            className="name-input"
+            value={character.name}
+            onChange={handleNameChange}
+            placeholder="Enter character name..."
+            autoFocus
+          />
+          <div className="campaign-reminder">
+            <strong>Campaign:</strong> {gameState.campaign.title}
+          </div>
+        </div>
+      );
+    }
 
-        <header className="header">
-          <h1 className="title">Create Character</h1>
-          <div className="subtitle">Step {step} of {getTotalSteps()}</div>
-        </header>
-
-        <div className="character-form">
-          {/* Step 1: Name */}
-          {step === 1 && (
-            <div className="form-step">
-              <h2 className="step-title">What is your character's name?</h2>
-              <input
-                type="text"
-                className="name-input form-input"
-                value={character.name}
-                onChange={handleNameChange}
-                placeholder="Enter character name..."
-                autoFocus
-              />
-              <div className="campaign-reminder">
-                <strong>Campaign:</strong> {gameState.campaign.title}
-              </div>
-            </div>
-          )}
-
-          {/* Step 2: Race */}
-          {step === 2 && (
-            <div className="form-step">
-              <h2 className="step-title">Choose your race</h2>
-              <div className="selection-grid">
-                {races.map((race, index) => (
-                  <div
-                    key={index}
-                    className={`selection-card ${character.race === race ? 'selected' : ''}`}
-                    onClick={() => handleRaceSelect(race)}
-                  >
-                    <div className="card-title">{race}</div>
-                    {character.race === race && selectedRaceData && (
-                      <div className="card-details">
-                        <div className="detail-item">Speed: {selectedRaceData.speed} ft</div>
-                        <div className="detail-item">Size: {selectedRaceData.size}</div>
-                        {selectedRaceData.traits && (
-                          <div className="detail-item traits">
-                            Traits: {selectedRaceData.traits.join(', ')}
-                          </div>
-                        )}
-                        <div className="card-description">{selectedRaceData.description}</div>
+    if (step === 2) {
+      return (
+        <div className="form-step">
+          <h2 className="step-title">Choose your race</h2>
+          <div className="race-grid">
+            {races.map((race, index) => (
+              <div
+                key={index}
+                className={`race-card ${character.race === race ? 'selected' : ''}`}
+                onClick={() => handleRaceSelect(race)}
+              >
+                <h3>{race}</h3>
+                {character.race === race && selectedRaceData && (
+                  <div className="race-bonuses">
+                    <p className="race-description">{selectedRaceData.description}</p>
+                    {selectedRaceData.abilityScoreIncrease && (
+                      <div>
+                        <strong>Ability Bonuses:</strong>
+                        <div>
+                          {Object.entries(selectedRaceData.abilityScoreIncrease).map(([ability, bonus]) => (
+                            <span key={ability} className="bonus-tag">
+                              {ability.toUpperCase().slice(0, 3)} +{bonus}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>
-                ))}
+                )}
               </div>
-            </div>
-          )}
+            ))}
+          </div>
+        </div>
+      );
+    }
 
-          {/* Step 3: Class */}
-          {step === 3 && (
-            <div className="form-step">
-              <h2 className="step-title">Choose your class</h2>
-              <div className="selection-grid">
-                {classes.map((cls, index) => (
-                  <div
-                    key={index}
-                    className={`selection-card ${character.class === cls ? 'selected' : ''}`}
-                    onClick={() => handleClassSelect(cls)}
-                  >
-                    <div className="card-title">{cls}</div>
-                  </div>
-                ))}
+    if (step === 3) {
+      return (
+        <div className="form-step">
+          <h2 className="step-title">Choose your class</h2>
+          <div className="class-grid">
+            {classes.map((cls, index) => (
+              <div
+                key={index}
+                className={`class-card ${character.class === cls ? 'selected' : ''}`}
+                onClick={() => handleClassSelect(cls)}
+              >
+                <h3>{cls}</h3>
               </div>
-            </div>
-          )}
+            ))}
+          </div>
+        </div>
+      );
+    }
 
-          {/* Step 4: Ability Scores */}
-          {step === 4 && (
-            <div className="form-step">
-              <h2 className="step-title">Assign Ability Scores</h2>
-              <div className="points-remaining">
-                Points Remaining: <span className="points-value">{pointsRemaining}</span>
-              </div>
-              <div className="point-buy-info">
-                Point Buy System (8-15 range, 27 points total)
-              </div>
+    if (step === 4) {
+      return (
+        <div className="form-step">
+          <h2 className="step-title">Assign Ability Scores</h2>
+          <div className="points-remaining">
+            Points Remaining: <strong>{pointsRemaining}</strong>
+          </div>
+          <div className="point-buy-info">
+            Point Buy System (8-15 range, 27 points total)
+          </div>
+          <div className="abilities-grid">
+            {['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'].map((ability) => {
+              const baseValue = character[ability];
+              const racialBonus = selectedRaceData?.abilityScoreIncrease?.[ability] || 0;
+              const finalValue = baseValue + racialBonus;
 
-              <div className="abilities-container">
-                {['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'].map(ability => {
-                  const baseValue = character[ability];
-                  const racialBonus = selectedRaceData?.abilityScoreIncrease?.[ability] || 0;
-                  const finalValue = baseValue + racialBonus;
-
-                  return (
-                    <div key={ability} className="ability-adjuster">
-                      <div className="ability-name">{ability.toUpperCase()}</div>
-                      <div className="ability-controls">
-                        <button
-                          className="ability-button"
-                          onClick={() => handleAbilityChange(ability, baseValue - 1)}
-                          disabled={baseValue <= 8}
-                        >
-                          −
-                        </button>
-                        <div className="ability-display">
-                          <div className="base-value">{baseValue}</div>
-                          {racialBonus > 0 && (
-                            <div className="racial-bonus">+{racialBonus}</div>
-                          )}
-                          <div className="final-value">= {finalValue}</div>
-                          <div className="modifier">
-                            ({Math.floor((finalValue - 10) / 2) >= 0 ? '+' : ''}
-                            {Math.floor((finalValue - 10) / 2)})
-                          </div>
-                        </div>
-                        <button
-                          className="ability-button"
-                          onClick={() => handleAbilityChange(ability, baseValue + 1)}
-                          disabled={baseValue >= 15}
-                        >
-                          +
-                        </button>
+              return (
+                <div key={ability} className="ability-adjuster">
+                  <label>{ability.charAt(0).toUpperCase() + ability.slice(1)}</label>
+                  <div className="ability-controls">
+                    <button onClick={() => handleAbilityChange(ability, baseValue - 1)} disabled={baseValue <= 8}>
+                      −
+                    </button>
+                    <div className="ability-display">
+                      <div className="base-value">{baseValue}</div>
+                      {racialBonus > 0 && <div className="racial-bonus">+{racialBonus}</div>}
+                      <div className="final-value">= {finalValue}</div>
+                      <div className="modifier">
+                        ({Math.floor((finalValue - 10) / 2) >= 0 ? '+' : ''}
+                        {Math.floor((finalValue - 10) / 2)})
                       </div>
+                    </div>
+                    <button onClick={() => handleAbilityChange(ability, baseValue + 1)} disabled={baseValue >= 15}>
+                      +
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+
+    if (step === 5 && character.race !== 'Variant Human') {
+      return renderSkillSelection();
+    }
+
+    if (step === 5 && character.race === 'Variant Human') {
+      return (
+        <div className="form-step">
+          <h2 className="step-title">Choose Your Feat</h2>
+          <p className="feat-description">As a Variant Human, you get to choose one feat at level 1.</p>
+          <div className="feats-grid">
+            {availableFeats.map((feat) => (
+              <div
+                key={feat.name}
+                className={`feat-card ${selectedFeat === feat.name ? 'selected' : ''}`}
+                onClick={() => handleFeatSelect(feat.name)}
+              >
+                <h3>{feat.name}</h3>
+                <p className="feat-desc">{feat.description}</p>
+                {feat.benefits && (
+                  <ul className="feat-benefits">
+                    {feat.benefits.map((benefit, index) => (
+                      <li key={index}>{benefit}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    if ((step === 6 && character.race === 'Variant Human') || (step === 5 && character.race !== 'Variant Human')) {
+      return renderSkillSelection();
+    }
+
+    const equipmentStep = getTotalSteps();
+    if (step === equipmentStep && startingItems.length > 0) {
+      return (
+        <div className="form-step">
+          <h2 className="step-title">Equip Your Starting Gear</h2>
+          <p className="equipment-description">Choose which items to equip. You can change this later.</p>
+          
+          <div className="starting-equipment-layout">
+            <div className="equipment-slots-column">
+              <h3>Equipment Slots</h3>
+              {Object.entries({
+                r_hand: 'Right Hand',
+                l_hand: 'Left Hand',
+                armor: 'Armor',
+                head: 'Head'
+              }).map(([slot, label]) => (
+                <div key={slot} className="equip-slot-preview">
+                  <div className="slot-label">{label}</div>
+                  {selectedEquipment[slot] ? (
+                    <div className="equipped-item-preview">
+                      <span>{selectedEquipment[slot].name}</span>
+                      <button
+                        className="unequip-btn"
+                        onClick={() => handleUnequipItem(slot)}
+                      >
+                        ✖
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="empty-slot-preview">Empty</div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="available-items-column">
+              <h3>Available Items</h3>
+              <div className="items-list">
+                {startingItems.map((item, index) => {
+                  const isEquipped = Object.values(selectedEquipment).some(eItem => eItem?.id === item.id);
+                  
+                  return (
+                    <div key={index} className={`item-card ${isEquipped ? 'equipped' : ''}`}>
+                      <div className="item-header">
+                        <strong>{item.name}</strong>
+                        {isEquipped && <span className="equipped-badge">✓ Equipped</span>}
+                      </div>
+                      <p className="item-desc">{item.description}</p>
+                      {item.damage && <div className="item-stat">Damage: {item.damage}</div>}
+                      {item.armorClass && <div className="item-stat">AC: {item.armorClass}</div>}
+                      
+                      {!isEquipped && item.equipSlot && item.equipSlot !== 'none' && (
+                        <div className="equip-buttons">
+                          {item.equipSlot === 'both_hands' ? (
+                            <button
+                              className="equip-btn"
+                              onClick={() => handleEquipItem(item, 'r_hand')}
+                            >
+                              Equip (Both Hands)
+                            </button>
+                          ) : (
+                            <button
+                              className="equip-btn"
+                              onClick={() => handleEquipItem(item, item.equipSlot)}
+                            >
+                              Equip to {item.equipSlot.replace('_', ' ')}
+                            </button>
+                          )}
+                        </div>
+                      )}
                     </div>
                   );
                 })}
               </div>
             </div>
-          )}
-
-          {/* Step 5: Skills */}
-          {step === 5 && character.race !== 'Variant Human' && (
-            <div className="form-step">
-              <h2 className="step-title">Choose Skill Proficiencies</h2>
-              <div className="skills-info">
-                Select {classSkillCount[character.class] || 2} skills
-              </div>
-              <div className="skills-remaining">
-                {(classSkillCount[character.class] || 2) - selectedSkills.length} remaining
-              </div>
-              <div className="skills-selection-grid">
-                {availableSkills.map(skill => (
-                  <div
-                    key={skill}
-                    className={`skill-selection-card ${selectedSkills.includes(skill) ? 'selected' : ''} ${
-                      !selectedSkills.includes(skill) && selectedSkills.length >= (classSkillCount[character.class] || 2) ? 'disabled' : ''
-                    }`}
-                    onClick={() => handleSkillToggle(skill)}
-                  >
-                    <div className="skill-name">{skill}</div>
-                    <div className="skill-ability">({allSkills[skill]?.substring(0, 3).toUpperCase()})</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Step 5: Feat (Variant Human only) */}
-          {step === 5 && character.race === 'Variant Human' && (
-            <div className="form-step">
-              <h2 className="step-title">Choose a Feat</h2>
-              <div className="feat-info">
-                As a Variant Human, you gain one feat at level 1
-              </div>
-              <div className="feats-selection-grid">
-                {availableFeats.map(featName => (
-                  <div
-                    key={featName}
-                    className={`feat-selection-card ${selectedFeat === featName ? 'selected' : ''}`}
-                    onClick={() => handleFeatSelect(featName)}
-                  >
-                    <div className="feat-name">{featName}</div>
-                    {selectedFeat === featName && selectedFeatData && (
-                      <div className="feat-details">
-                        <div className="feat-description">{selectedFeatData.description}</div>
-                        <div className="feat-benefits">
-                          {selectedFeatData.benefits.map((benefit, i) => (
-                            <div key={i} className="feat-benefit">• {benefit}</div>
-                          ))}
-                        </div>
-                        {selectedFeatData.prerequisites && (
-                          <div className="feat-prereqs">Prerequisites: {selectedFeatData.prerequisites}</div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Step 6: Skills (Variant Human) */}
-          {step === 6 && character.race === 'Variant Human' && (
-            <div className="form-step">
-              <h2 className="step-title">Choose Skill Proficiencies</h2>
-              <div className="skills-info">
-                Select {classSkillCount[character.class] || 2} skills
-              </div>
-              <div className="skills-remaining">
-                {(classSkillCount[character.class] || 2) - selectedSkills.length} remaining
-              </div>
-              <div className="skills-selection-grid">
-                {availableSkills.map(skill => (
-                  <div
-                    key={skill}
-                    className={`skill-selection-card ${selectedSkills.includes(skill) ? 'selected' : ''} ${
-                      !selectedSkills.includes(skill) && selectedSkills.length >= (classSkillCount[character.class] || 2) ? 'disabled' : ''
-                    }`}
-                    onClick={() => handleSkillToggle(skill)}
-                  >
-                    <div className="skill-name">{skill}</div>
-                    <div className="skill-ability">({allSkills[skill]?.substring(0, 3).toUpperCase()})</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="form-actions">
-            {step > 1 && (
-              <button className="secondary-button" onClick={handleBack}>
-                Back
-              </button>
-            )}
-            <button className="primary-button" onClick={handleNext}>
-              {step === getTotalSteps() ? 'Start Adventure' : 'Next'}
-            </button>
           </div>
         </div>
+      );
+    }
+
+    return null;
+  };
+
+  const renderSkillSelection = () => {
+    const requiredSkills = classSkillCount[character.class] || 2;
+    
+    return (
+      <div className="form-step">
+        <h2 className="step-title">Choose Your Skills</h2>
+        <p className="skills-description">
+          Select {requiredSkills} skill proficiencies for your {character.class}.
+        </p>
+        <div className="skills-counter">
+          Selected: {selectedSkills.length} / {requiredSkills}
+        </div>
+        <div className="skills-grid">
+          {availableSkills.map((skill) => (
+            <div
+              key={skill}
+              className={`skill-card ${selectedSkills.includes(skill) ? 'selected' : ''} ${
+                selectedSkills.length >= requiredSkills && !selectedSkills.includes(skill) ? 'disabled' : ''
+              }`}
+              onClick={() => handleSkillToggle(skill)}
+            >
+              <h4>{skill}</h4>
+              <p className="skill-ability">({allSkills[skill].toUpperCase().slice(0, 3)})</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="character-creation-container">
+      <div className="creation-header">
+        <h1>Create Your Character</h1>
+        <div className="step-indicator">
+          Step {step} of {getTotalSteps()}
+        </div>
+      </div>
+
+      <div className="creation-content">
+        {renderStepContent()}
+      </div>
+
+      <div className="creation-navigation">
+        <button
+          className="nav-button back"
+          onClick={handleBack}
+          disabled={step === 1}
+        >
+          Back
+        </button>
+        <button
+          className="nav-button next"
+          onClick={handleNext}
+        >
+          {step === getTotalSteps() ? 'Start Adventure' : 'Next'}
+        </button>
       </div>
     </div>
   );

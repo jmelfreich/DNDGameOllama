@@ -1,223 +1,211 @@
 // frontend/src/components/DiceRoller.js - FIXED
 import React, { useState } from 'react';
-import { calculateModifier } from '../utils/diceRolls';
 
-function DiceRoller({ character, skill, dc, attackRoll = false, onComplete, onCancel }) {
+function DiceRoller({ character, skill, dc, attackRoll, attackModifier, attackName, onComplete, onCancel, advantage, disadvantage }) {
   const [rolling, setRolling] = useState(false);
-  const [result, setResult] = useState(null);
-  const [rollType, setRollType] = useState('normal');
+  const [rollResult, setRollResult] = useState(null);
 
+  // Calculate modifier based on skill
   const getModifier = () => {
+    // *** FIX: Use attackModifier if provided (for attack rolls) ***
+    if (attackRoll && attackModifier !== undefined) {
+      return attackModifier;
+    }
+
     if (attackRoll) {
-      // For attack rolls, use strength or dexterity modifier (whichever is higher)
-      const strMod = calculateModifier(character.strength);
-      const dexMod = calculateModifier(character.dexterity);
+      // Fallback for attack rolls without explicit modifier
+      const dexModifier = Math.floor((character.dexterity - 10) / 2);
       const proficiencyBonus = Math.floor((character.level - 1) / 4) + 2;
-      return Math.max(strMod, dexMod) + proficiencyBonus;
+      return dexModifier + proficiencyBonus;
     }
 
-    // If skill is not provided, return 0
-    if (!skill) {
-      return 0;
-    }
-
-    // For skill checks, use the appropriate ability modifier
-    const abilityMap = {
-      'strength': character.strength,
-      'dexterity': character.dexterity,
-      'constitution': character.constitution,
-      'intelligence': character.intelligence,
-      'wisdom': character.wisdom,
-      'charisma': character.charisma,
-      'athletics': character.strength,
-      'acrobatics': character.dexterity,
-      'sleight of hand': character.dexterity,
-      'stealth': character.dexterity,
-      'arcana': character.intelligence,
-      'history': character.intelligence,
-      'investigation': character.intelligence,
-      'nature': character.intelligence,
-      'religion': character.intelligence,
-      'animal handling': character.wisdom,
-      'insight': character.wisdom,
-      'medicine': character.wisdom,
-      'perception': character.wisdom,
-      'survival': character.wisdom,
-      'deception': character.charisma,
-      'intimidation': character.charisma,
-      'performance': character.charisma,
-      'persuasion': character.charisma
+    // Skill check modifiers
+    const skillToAbility = {
+      'Acrobatics': 'dexterity',
+      'Animal Handling': 'wisdom',
+      'Arcana': 'intelligence',
+      'Athletics': 'strength',
+      'Deception': 'charisma',
+      'History': 'intelligence',
+      'Insight': 'wisdom',
+      'Intimidation': 'charisma',
+      'Investigation': 'intelligence',
+      'Medicine': 'wisdom',
+      'Nature': 'intelligence',
+      'Perception': 'wisdom',
+      'Performance': 'charisma',
+      'Persuasion': 'charisma',
+      'Religion': 'intelligence',
+      'Sleight of Hand': 'dexterity',
+      'Stealth': 'dexterity',
+      'Survival': 'wisdom'
     };
 
-    const ability = abilityMap[skill.toLowerCase()] || character.strength;
+    const ability = skillToAbility[skill] || 'strength';
+    const abilityScore = character[ability] || 10;
+    const abilityModifier = Math.floor((abilityScore - 10) / 2);
+
+    // Check if character is proficient in this skill
+    const isProficient = character.skills?.some(s => s.name === skill && s.proficient);
     const proficiencyBonus = Math.floor((character.level - 1) / 4) + 2;
-    
-    return calculateModifier(ability) + proficiencyBonus;
+
+    return abilityModifier + (isProficient ? proficiencyBonus : 0);
   };
 
-  // Simple d20 roll function
-  const rollD20 = () => {
-    return Math.floor(Math.random() * 20) + 1;
+  const rollDice = (sides) => {
+    return Math.floor(Math.random() * sides) + 1;
   };
 
-  const handleRoll = () => {
+  const performRoll = () => {
     setRolling(true);
 
-    // Simulate dice roll animation
-    let animationCount = 0;
-    const animationInterval = setInterval(() => {
-      setResult({
-        roll: rollD20(),
-        modifier: getModifier(),
-        total: 0,
-        success: false
-      });
+    setTimeout(() => {
+      const modifier = getModifier();
+      let roll1 = rollDice(20);
+      let roll2 = null;
+      let finalRoll = roll1;
 
-      animationCount++;
-      if (animationCount >= 10) {
-        clearInterval(animationInterval);
-        performFinalRoll();
+      if (advantage && !disadvantage) {
+        roll2 = rollDice(20);
+        finalRoll = Math.max(roll1, roll2);
+      } else if (disadvantage && !advantage) {
+        roll2 = rollDice(20);
+        finalRoll = Math.min(roll1, roll2);
       }
-    }, 100);
-  };
 
-  const performFinalRoll = () => {
-    const modifier = getModifier();
-    let roll;
+      const total = finalRoll + modifier;
+      const success = total >= dc;
 
-    // For attack rolls in combat, always use normal roll (no player choice)
-    // The DM/system determines advantage/disadvantage based on conditions
-    if (attackRoll) {
-      roll = rollD20();
-    } else {
-      // For skill checks outside combat, player can choose
-      if (rollType === 'advantage') {
-        const roll1 = rollD20();
-        const roll2 = rollD20();
-        roll = Math.max(roll1, roll2);
-      } else if (rollType === 'disadvantage') {
-        const roll1 = rollD20();
-        const roll2 = rollD20();
-        roll = Math.min(roll1, roll2);
-      } else {
-        roll = rollD20();
-      }
-    }
+      const result = {
+        roll: finalRoll,
+        roll1: roll1,
+        roll2: roll2,
+        modifier: modifier,
+        total: total,
+        dc: dc,
+        success: success,
+        criticalHit: finalRoll === 20,
+        criticalFailure: finalRoll === 1,
+        advantage: advantage && !disadvantage,
+        disadvantage: disadvantage && !advantage
+      };
 
-    const total = roll + modifier;
-    const success = total >= dc;
-
-    const finalResult = {
-      roll,
-      modifier,
-      total,
-      success,
-      criticalHit: roll === 20,
-      criticalMiss: roll === 1
-    };
-
-    setResult(finalResult);
-    setRolling(false);
+      setRollResult(result);
+      setRolling(false);
+    }, 1000);
   };
 
   const handleComplete = () => {
-    if (result && onComplete) {
-      onComplete(result);
+    if (rollResult) {
+      onComplete(rollResult);
     }
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content dice-roller-modal">
+    <div className="dice-roller-overlay">
+      <div className="dice-roller-modal">
         <button className="modal-close" onClick={onCancel}>×</button>
-
+        
         <h2 className="modal-title">
-          {attackRoll ? 'Attack Roll' : skill ? `${skill} Check` : 'Ability Check'}
+          {attackRoll ? (attackName || 'Attack Roll') : `${skill} Check`}
         </h2>
 
         {dc && (
           <div className="dice-roller-dc">
-            Target: {attackRoll ? `AC ${dc}` : `DC ${dc}`}
+            Target {attackRoll ? 'AC' : 'DC'}: <strong>{dc}</strong>
           </div>
         )}
 
-        {/* Only show roll type selection for skill checks, not attack rolls */}
-        {!attackRoll && !result && (
-          <div className="roll-type-selector">
+        <div className="dice-info">
+          <div className="modifier-display">
+            +{getModifier()}
+          </div>
+          <div className="modifier-breakdown">
+            {attackRoll ? 'Attack Bonus' : 'Skill Modifier'}
+          </div>
+        </div>
+
+        {(advantage || disadvantage) && (
+          <div className={`roll-condition ${advantage ? 'advantage' : 'disadvantage'}`}>
+            {advantage && !disadvantage && '⬆️ ADVANTAGE (Roll 2d20, take higher)'}
+            {disadvantage && !advantage && '⬇️ DISADVANTAGE (Roll 2d20, take lower)'}
+          </div>
+        )}
+
+        {!rollResult && !rolling && (
+          <div className="roll-options">
             <button
-              className={`roll-type-button ${rollType === 'normal' ? 'active' : ''}`}
-              onClick={() => setRollType('normal')}
+              className="roll-button primary-button"
+              onClick={performRoll}
             >
-              Normal
-            </button>
-            <button
-              className={`roll-type-button ${rollType === 'advantage' ? 'active' : ''}`}
-              onClick={() => setRollType('advantage')}
-            >
-              Advantage
-            </button>
-            <button
-              className={`roll-type-button ${rollType === 'disadvantage' ? 'active' : ''}`}
-              onClick={() => setRollType('disadvantage')}
-            >
-              Disadvantage
+              🎲 Roll the Dice
             </button>
           </div>
         )}
 
-        {/* Attack rolls always use normal (DM determines conditions) */}
-        {attackRoll && !result && (
-          <div className="dice-roller-info">
-            Rolling attack with your modifier
+        {rolling && (
+          <div className="dice-animation">
+            <div className="dice-rolling">
+              <div className="d20">🎲</div>
+              <div className="rolling-text">Rolling...</div>
+            </div>
           </div>
         )}
 
-        <div className="dice-display">
-          {result ? (
-            <div className={`dice-result ${result.success ? 'success' : 'failure'}`}>
-              <div className="dice-roll-value">
-                {result.roll}
-                {result.criticalHit && <span className="critical-badge">CRITICAL HIT!</span>}
-                {result.criticalMiss && <span className="critical-badge miss">CRITICAL MISS!</span>}
-              </div>
-              {result.modifier !== 0 && (
-                <div className="dice-modifier">
-                  {result.modifier >= 0 ? '+' : ''}{result.modifier}
+        {rollResult && (
+          <div className="dice-result">
+            <div className="dice-display">
+              {rollResult.roll2 !== null ? (
+                <div className="advantage-rolls">
+                  <div className="roll-pair">
+                    <span className={rollResult.roll === rollResult.roll1 ? 'selected' : 'not-selected'}>
+                      🎲 {rollResult.roll1}
+                    </span>
+                    <span className={rollResult.roll === rollResult.roll2 ? 'selected' : 'not-selected'}>
+                      🎲 {rollResult.roll2}
+                    </span>
+                  </div>
+                  <div className="roll-label">
+                    {rollResult.advantage ? 'Taking Higher' : 'Taking Lower'}: <strong>{rollResult.roll}</strong>
+                  </div>
+                </div>
+              ) : (
+                <div className="dice-roll-value">
+                  {rollResult.roll}
+                  {rollResult.criticalHit && <span className="critical-badge">CRIT!</span>}
+                  {rollResult.criticalFailure && <span className="critical-badge miss">MISS!</span>}
                 </div>
               )}
-              <div className="dice-total">= {result.total}</div>
-              <div className={`dice-outcome ${result.success ? 'success' : 'failure'}`}>
-                {result.criticalHit ? '🎯 Critical Success!' : 
-                 result.criticalMiss ? '💥 Critical Failure!' :
-                 result.success ? '✓ Success!' : '✗ Failure'}
+              
+              {rollResult.modifier !== 0 && (
+                <div className="dice-modifier">
+                  {rollResult.modifier >= 0 ? '+' : ''}{rollResult.modifier}
+                </div>
+              )}
+              
+              <div className="dice-total">
+                = {rollResult.total}
               </div>
             </div>
-          ) : (
-            <div className="dice-placeholder">
-              <div className="dice-icon">🎲</div>
-              <div className="dice-text">Ready to roll d20</div>
-            </div>
-          )}
-        </div>
 
-        <div className="dice-roller-actions">
-          {!result ? (
-            <button
-              className="primary-button"
-              onClick={handleRoll}
-              disabled={rolling}
-            >
-              {rolling ? 'Rolling...' : 'Roll Dice'}
-            </button>
-          ) : (
-            <button
-              className="primary-button"
-              onClick={handleComplete}
-            >
-              Continue
-            </button>
-          )}
-        </div>
+            <div className={`dice-outcome ${rollResult.success ? 'success' : 'failure'}`}>
+              {rollResult.criticalHit && '🌟 CRITICAL SUCCESS!'}
+              {rollResult.criticalFailure && '💀 CRITICAL FAILURE!'}
+              {!rollResult.criticalHit && !rollResult.criticalFailure && (
+                rollResult.success ? '✅ SUCCESS' : '❌ FAILURE'
+              )}
+            </div>
+
+            <div className="dice-roller-actions">
+              <button
+                className="primary-button"
+                onClick={handleComplete}
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
